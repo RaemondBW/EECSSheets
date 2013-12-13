@@ -1,0 +1,205 @@
+\documentclass[3pt,landscape]{article}
+%ss[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{color,graphicx,overpic}
+\usepackage{hyperref}
+
+
+\pdfinfo{
+/Title (example.pdf)
+/Creator (TeX)
+/Producer (pdfTeX 1.40.0)
+/Author (Seamus)
+/Subject (Example)
+/Keywords (pdflatex, latex,pdftex,tex)}
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+    {\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+    }
+
+% Turn off header and footer
+\pagestyle{empty}
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                            {-1ex plus -.5ex minus -.2ex}%
+                            {0.5ex plus .2ex}%x
+                            {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                            {-1explus -.5ex minus -.2ex}%
+                            {0.5ex plus .2ex}%
+                            {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                            {-1ex plus -.5ex minus -.2ex}%
+                            {1ex plus .2ex}%
+                            {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+%My Environments
+\newtheorem{example}[section]{Example}
+% -----------------------------------------------------------------------
+
+\def\ci{\perp\!\!\!\perp}
+
+\begin{document}
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+    \Large{\underline{CS 188 Midterm 2}} \\
+\end{center}
+
+\subsection*{Probability}
+\subsubsection*{Product Rule:}
+\[P(y)P(x|y)=P(x,y)\]
+\subsubsection*{Chain Rule:}
+\[P(x_{1},x_{2},x_{3})=P(x_{1})P(x_{2}|x_{1})P(x_{3}|x_{1},x_{2})\]
+\subsubsection*{Bayes Rule:}
+\[P(x,y)=P(x|y)P(y)=P(y|x)P(x)\]
+\[P(x|y)=\frac{P(y|x)}{P(y)}P(x)\]
+\[P(\texttt{Cause}|\texttt{Effect})=\frac{P(\texttt{Effect}|\texttt{Cause})P(\texttt{Cause})}{P(\texttt{Effect})}\]
+\subsubsection*{Independence:}
+Two variable are independent in a joint distribution if:
+\[P(x,y)=P(x)P(y)\]
+\[X \ci Y\]
+\[ \forall x,y P(x,y)=P(x)P(y)\]
+\subsection*{Conditional Independence}
+\subsubsection*{X is conditionally independent of Y given Z:}
+\[X \ci Y|Z\]
+if and only if:
+\[\forall x,y,z:P(x,y|z)=P(x|z)P(y|z)\]
+or equivalently, if and only if:
+\[\forall x,y,z:P(x|z,y)=P(x|z)\]
+\subsubsection*{Inference: Calculating some useful quantity from a joint probablility distribution.}
+Example:\\
+Posterior probability
+\[P(Q|E_{1}=e_{1},\ldots E_{k}=e_{k})\]
+Most likely explanation:
+\[\texttt{argmax}_{q}P(Q=q|E_{1}=e_{1}\ldots)\]
+\subsection*{Bayes' Net Sampling}
+Prior Sampling P\\
+Rejection Sampling \(P(Q|e)\)\\
+Likelihood Weighting \(P(Q|e)\)\\
+\subsubsection*{Gibbs Sampling \(P(Q|e)\)}
+Step 1: Fix evidence\\
+Step 2: Initialize other variables randomly\\
+Step 3: Repeat
+\subsection*{Expected Utility}
+\[\sum_{a}P(a)U(a,t)\]
+\subsubsection*{Max Expected Utility:}
+\[MEU(\o)=max_{a}EU(a)\]
+\subsection*{Value of Perfect Information}
+\[VPI(E'|e)=\left(\sum_{e'}P(e'|e)MEU(e,e')\right)-MEU(e)\]
+Assume we have evidence E=e. Value if we act now:
+\[MEU(e)=max_{a}\sum_{s}P(s|e)U(s,a)\]
+Assume we see E'=e'. Value if we act now:
+\[MEU(e,e')=max_{a}\sum_{s}P(s|e,e')U(s,a)\]
+{\footnotesize but E' is a random variable whose value is unknown, so we don't know what e' will be.}\\
+Expected value if E' is revealed and then we act:
+\[MEU(e,E')=\sum_{e'}P(e',e)MEU(e,e')\]
+Value of information: how much MEU goes up by revealing E' first then acting, over acting now:
+\[VPI(E'|e)=MEU(e,E')-MEU(e)\]
+\subsubsection*{Properties:}
+Nonnegative:
+\[\forall E',e:VPI(E'|e) \geq 0\]
+Nonadditive:
+\[VPI(E_{j},E_{k}|e)\neq VPI(E_{j}|e)+VPI(E_{k}|e)\]
+Order-independent:
+\[VPI(E_{j},E_{k}|e)=VPI(E_{j}|e)+VPI(E_{k}|e,E_{j})\]
+\[=VPI(E_{k}|e)+VPI(E_{j}|e,E_{k})\]
+\subsection*{Markov Models}
+\subsubsection*{Forward Algorithm:}
+\[\texttt{given } P(x_{1}) = \texttt{known, } P(x_{t})=\sum_{x_{t-1}}P(x_{t}|x_{t-1})P(x_{t-1})\]
+\[\texttt{satisfying, }P_{\infty}(X)=P_{\infty +1}(X)=\sum_{x}P_{t+1|t}(X|x)P_{\infty}(x)\]
+\subsection*{Hidden Markov Models}
+Assume we have current belief P(X | evidence to date):
+\[B(X_{t}=P(X_{t}|e_{1:t})\]
+Then after one time step passes (Elapse Time):
+\[B'(X_{t+t})=\sum_{x_{t}}P(X'|x)B(x_{t})\]
+Result of an observation, given current Belief:
+\[B'(X_{t+1})=P(X_{t+1}|e_{1:t})\]
+\subsection*{Dynamic Bayes Net Particle Filters}
+Initialize: Generate prior samples for the t=1 Bayes net
+\[\texttt{Example particle: }G_{1}^{a}=(3,3),G_{1}^{b}=(5,3)\]
+Elapse time: Sample a successor for each particle
+\[\texttt{Example successor: }G_{2}^{a}=(2,3),G_{2}^{b}=(6,3)\]
+Observe: Weight each entire sample by the likelihood of the evidence conditioned on the sample
+\[\texttt{Likelihood: }P(E_{1}^{a}|G_{1}^{a})*P(E_{1}^{b}|G_{1}^{b})\]
+Resample: Select prior samples (tuples of values) in proporation to their likelihood
+\subsection*{Parameter Estimation}
+\subsubsection*{Empirical Rate (Maximum Likelihood Estimate):}
+\[P_{ML}(x)=\frac{\texttt{count}(x)}{\texttt{total samples}}\]
+\subsubsection*{Likelihood of the data:}
+\[L(x,\Theta)=\prod_{i}P_{\Theta}(x_{i})\]
+\subsubsection*{Laplace Smoothing:}
+\[P_{LAP,k}(x)=\frac{c(x)+k}{N+k|X|}\]
+\subsubsection*{Laplace for conditionals:}
+\[P_{LAP,k}(x|y)=\frac{c(x,y)+k}{c(y)+k|X|}\]
+\subsubsection*{Linear Interpolation:}
+\[P_{LIN}(x|y)=\alpha \hat{P}(x|y)+(1.0-\alpha )\hat{P}(x)\]
+\subsection*{Perceptrons}
+\subsubsection*{Linear Classifiers:}
+\[\texttt{activation}_{w}(x)=\sum_{i}w_{i}*f_{i}(x)=w*f(x)\]
+\subsubsection*{Learning: Binary Perceptron:}
+Start with weights = 0\\
+classify with the current weights:
+\[y=\left\{\begin{array}{lr}+1 & \texttt{if } w*f(x) \geq 0\\-1 & \texttt{if } w*f(x) < 0\end{array}\right.\]
+\subsection*{Multiclass Perceptron}
+Start with all weights = 0\\
+Predict with current weights:
+\[y = \texttt{arg max}_{y}w_{y}*f(x)\]
+If correct make no change\\
+If wrong: lower score of wrong answer, raise score of right answer
+\[w_{y}=w_{y}-f(x)\]
+\[w_{y*}=w_{y*}+f(x)\]
+\subsubsection*{Properties of the perceptron}
+Separability: true if some parameters get the training set perfectly correct\\
+Convergence: if the training is separable, perceptron will eventually converge (binary case)\\
+Mistake Bound: the maximum number of mistakes (binary case) related to the margin or degree of separability.
+\subsubsection*{Problems with the perceptron}
+Noise: if the data isn't separable, weights might thrash\\
+Mediocre generalization: finds a "barely" separating solution\\
+Overtraining: test/held-out accuracy usually rises, then falls. Is a kind of overfitting.
+\subsubsection*{MIRA*: fixing the perceptron}
+\[min_{w}\frac{1}{2}\sum_{y}||w_{y}-w_{y}'||^{2}\]
+\[w_{y*}*f(x) \geq w_{y}*f(x)+1\]
+
+% You can even have references
+\rule{0.3\linewidth}{0.25pt}
+\scriptsize
+\bibliographystyle{abstract}
+\bibliography{refFile}
+\end{multicols}
+\end{document}
