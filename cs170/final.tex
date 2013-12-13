@@ -88,6 +88,7 @@ def gcd(a,b):
         return a
     return gcd(b, a mod b)
 \end{verbatim}
+
 \subsection*{Extended GCD: \(O(n^{3})\)}
 \begin{verbatim}
 def extended-gcd(a,b):
@@ -96,13 +97,77 @@ def extended-gcd(a,b):
     (x', y', d) = extended-gcd(b, a mod b)
     return (y', x' - floor(a/b)*y', d)
 \end{verbatim}
-if d divides a and b and \(d=ax+by\) for some integers s and y,
+if d divides a and b and \(d=ax+by\) for some integers s and y,\\
 then d = gcd(a, b)
+
 \subsection*{Multiplicative Inverse}
 inverse of a,
 \[ax \equiv 1 (\texttt{mod } N)\]
 for any \(a (\texttt{mod } N)\), a has a multiplicative inverse if and only if they are relatively prime, gcd(a,N) = 1
 
+\subsection*{Fermat's Little Theorem}
+given a prime (or carmichael) p,
+\[a^{p-1} \equiv 1 (\texttt{mod } p\]
+
+\subsection*{RSA Euler's Theorem}
+\[m^{(p-a)(q-1)}=1 (\texttt{mod } p)\]
+
+\subsection*{Master's Theorem}
+If
+\[T(n)=aT(\lceil n/b \rceil)+O(n^{d}) \texttt{ for } a>0,b>1 \texttt{, and } d\geq 0,\]
+then,
+\[T(n)=\left\{\begin{array}{lr}
+            O(n^{d}) & if d>log_{b}a\\
+            O(n^{d}logn) & if d=log_{b}a\\
+            O(n^{log_{b}a}) & if d < lob_{b}a
+        \end{array}
+        \right.\]
+
+\subsection*{Fast Fourier Transform}
+Todo Add FFT Information Here
+
+\subsection*{Depth First Search}
+\begin{verbatim}
+def explore(G,v): #Where G = (V,E) of a Graph
+    visited(v) = true
+    previsit(v)
+    for each edge(v,u) in E:
+        if not visited(u):
+            explore(u)
+    postvisit(v)
+
+def dfs(G):
+    for all v in V:
+        if not visited(v):
+            explore(v)
+\end{verbatim}
+Previsit = count till node added to the queue\\
+Postvisit = count till you leave the given node\\
+A directed Graph has a cycle if it has a back edge found during DFS
+
+\subsection*{Directed Acyclic Graphs}
+Every DAG has a source and sink\\
+Todo add more properties
+
+\subsection*{Greedy Algorithms}
+\subsubsection*{Kruskal's MST Algorithm}
+Repeatedly add the next lightest edge that doesn't produce a cycle.
+
+\subsubsection*{Properties of Trees (undirected acyclic graphs)}
+\begin{itemize}
+    \item A tree with n nodes has n-1 edges
+    \item Any connected undirected graph G(V,E), with \(|E|=|V|-1\) is a tree
+    \item An undirected graph is a tree if and only if there is a unique path between any pair of nodes.
+\end{itemize}
+
+\subsubsection*{Cut Property}
+Suppose edges X are part of a minimum spanning tree of \(G=(V,E)\). Pick any subset of nodes S for which X does not cross between S and V-S, and let e be the lightest edge across the partition. Then \(X \cup {e}\) is part of some Minimum Spanning Tree.
+
+\subsubsection*{Prim's Algorithm}
+(an alternative to Kruskal's Algorithm and similar to Dijkstras)\\
+On each iteration, the subtreedefined by x grows by one edge, the lightest between a vertex in S and a vertex outside S.
+
+\subsubsection*{Huffman Encoding}
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
 \scriptsize
