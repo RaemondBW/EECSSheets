@@ -10,11 +10,11 @@
 
 
 \pdfinfo{
-/Title (example.pdf)
+/Title (final.pdf)
 /Creator (TeX)
 /Producer (pdfTeX 1.40.0)
-/Author (Seamus)
-/Subject (Example)
+/Author (Raemond Bergstrom-Wood)
+/Subject (Algorithms)
 /Keywords (pdflatex, latex,pdftex,tex)}
 
 % This sets page margins to .5 inch if using letter paper, and to 1cm
@@ -78,7 +78,7 @@
 \setlength{\columnsep}{2pt}
 
 \begin{center}
-    \Large{\underline{CS 170 Final}} \\
+    \Large{\underline{CS 170 Final Cheat Sheet}} \\
 \end{center}
 
 \subsection*{Euclid's GCD: \(O(n^{3})\)}
@@ -106,8 +106,9 @@ inverse of a,
 for any \(a (\texttt{mod } N)\), a has a multiplicative inverse if and only if they are relatively prime, gcd(a,N) = 1
 
 \subsection*{Fermat's Little Theorem}
+todo add the proof of this\\
 given a prime (or carmichael) p,
-\[a^{p-1} \equiv 1 (\texttt{mod } p\]
+\[a^{p-1} \equiv 1 (\texttt{mod } p)\]
 
 \subsection*{RSA Euler's Theorem}
 \[m^{(p-a)(q-1)}=1 (\texttt{mod } p)\]
@@ -168,6 +169,23 @@ Suppose edges X are part of a minimum spanning tree of \(G=(V,E)\). Pick any sub
 On each iteration, the subtreedefined by x grows by one edge, the lightest between a vertex in S and a vertex outside S.
 
 \subsubsection*{Huffman Encoding}
+A means to encode data using the optimal number of bits for each character given a distribution.
+\begin{verbatim}
+Huffman(f):
+Input: An array f{1...n] of frequencies
+Output: An encoding tree with n leaves
+
+let H be a priority queue of integers, ordered by f
+for i=1 to n: insert(H,i)
+    i=deletemin(H), j=deletemin(H)
+    create a node numbered k with children i,j
+    f[k] = f[i]+f[j]
+    insert(H,k)
+\end{verbatim}
+
+
+\subsubsection*{Horn Formulas}
+
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
 \scriptsize
