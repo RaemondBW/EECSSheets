@@ -183,8 +183,36 @@ for i=1 to n: insert(H,i)
     insert(H,k)
 \end{verbatim}
 
-
 \subsubsection*{Horn Formulas}
+Horn Formulas are a framework expressing logical facts and deriving conclusions. A Horn Clause is a possible solution to the Formulas. Variables are represented by two kinds of clauses:
+\begin{enumerate}
+    \item Implications, whose left-hand side is an AND of any numbers of positive literals and whose right-hand side is a signle positive literal. ("If the conditions on the left hold, then the one on the right mush also be true.")
+        \[(z \wedge w) \Rightarrow u\]
+    \item Pure negative clauses, consisting of an OR of any number of negative literals.
+        \[(\bar{u} \vee \bar{v} \vee \bar{y})\]
+\end{enumerate}
+The a greedy algorithm to solve a Horn Formula:
+\begin{verbatim}
+Input: a Horn formula
+Output: a satisfying assignment, if one exists
+
+set all variables to false
+while there is an implication that is not satisfied:
+    set the right-hand variable of the implication to true
+if all pure negative clases are satisfied:
+    return the assignment
+return 'The formula is not satisfiable.'
+\end{verbatim}
+
+\subsubsection*{Set Cover Algorithm}
+(example. This is the Schools distributed in towns problem.)\\
+\begin{verbatim}
+Input: A set of elements B; sets S1,...,Sm
+Output: A selection of the Si whose union is B.
+
+Repeat until all elements of B are covered:
+    Pick the set Si with the largest number of uncovered elements.
+\end{verbatim}
 
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
