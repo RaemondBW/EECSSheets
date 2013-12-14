@@ -21,7 +21,7 @@
 % if using A4 paper. (This probably isn't strictly necessary.)
 % If using another size paper, use default 1cm margins.
 \ifthenelse{\lengthtest { \paperwidth = 11in}}
-    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+    { \geometry{top=.3in,left=.3in,right=.3in,bottom=.3in} }
     {\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
         {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
         {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
@@ -205,15 +205,35 @@ return 'The formula is not satisfiable.'
 \end{verbatim}
 
 \subsubsection*{Set Cover Algorithm}
-(example. This is the Schools distributed in towns problem.)\\
+(example. This is the Schools distributed across towns problem.)\\
 \begin{verbatim}
 Input: A set of elements B; sets S1,...,Sm
 Output: A selection of the Si whose union is B.
 
 Repeat until all elements of B are covered:
-    Pick the set Si with the largest number of uncovered elements.
+    Pick the set Si with the largest number of
+            uncovered elements.
 \end{verbatim}
 
+\subsection*{Dynamic Programming}
+\subsubsection*{Longest Increasing Subsequence: \(O(n^{2})\)}
+The following algorithm starts at one side of the list and finds the max length of sequences terminating at that given node, recursively following backlinks. Then given all the lengths of paths terminating at that given node choose the max length. Without memoization, this solution would be exponential time.
+\begin{verbatim}
+L = {}
+for j=1,2,...,n:
+    L[j] = 1+max{L[i]:(i,j) in E}
+    # The (i,j) represents all the edges that go from
+    # a node to j.
+return max(L)
+\end{verbatim}
+
+\subsubsection*{Edit Distance (Spelling Suggestions)}
+This algorithm works by basically choosing the min of the options for every given letter. (The 3 options being adding a gap inbetween letters of one of the strings or matching the two letters and moving on.)\\
+ex) Snowy and sunny have an edit distance of 3 with this configuration
+\begin{verbatim}
+S _ N O W Y
+S U N N _ Y
+\end{verbatim}
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
 \scriptsize
