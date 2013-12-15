@@ -106,7 +106,7 @@ inverse of a,
 for any \(a (\texttt{mod } N)\), a has a multiplicative inverse if and only if they are relatively prime, gcd(a,N) = 1
 
 \subsection*{Fermat's Little Theorem}
-todo add the proof of this\\
+% todo add the proof of this\\
 given a prime (or carmichael) p,
 \[a^{p-1} \equiv 1 (\texttt{mod } p)\]
 
@@ -125,9 +125,11 @@ then,
         \right.\]
 
 \subsection*{Fast Fourier Transform}
-Todo Add FFT Information Here
+not done yet
+% todo Add FFT Information Here
 
-\subsection*{Depth First Search}
+\subsection*{Search Algorithms}
+\subsubsection*{Depth First Search}
 \begin{verbatim}
 def explore(G,v): #Where G = (V,E) of a Graph
     visited(v) = true
@@ -148,11 +150,29 @@ A directed Graph has a cycle if it has a back edge found during DFS
 
 \subsection*{Directed Acyclic Graphs}
 Every DAG has a source and sink\\
-Todo add more properties
+% todo add more properties
 
 \subsection*{Greedy Algorithms}
-\subsubsection*{Kruskal's MST Algorithm}
+\subsubsection*{Kruskal's MST Algorithm \(O(E\log{v})\)}
 Repeatedly add the next lightest edge that doesn't produce a cycle.
+\begin{verbatim}
+Input: A connected undirected graph G = (V,E) with edge 
+        weights w
+Output: A minimum spanning tree defined by the edges X
+
+for all u in V:
+    makeset(u)
+X = {}
+Sort the edges E by weight
+for all edges {u,v} in E, in increasing order of weight:
+    if find(u) != find(v):
+        add edge {u,v} to X
+        union(u,v)
+\end{verbatim}
+The above algorithm utilizes disjoint sets to determine whether adding a given edge creates a cycle. Basically by checking whether or not both sets have the same root ancestor.
+
+\subsubsection*{Disjoint Sets Data Structure}
+Contains a function, "find" that returns the root a given set.
 
 \subsubsection*{Properties of Trees (undirected acyclic graphs)}
 \begin{itemize}
@@ -215,6 +235,10 @@ Repeat until all elements of B are covered:
             uncovered elements.
 \end{verbatim}
 
+\subsubsection*{Disjoint Sets Data Structure}
+asdfjkl;
+% todo
+
 \subsection*{Dynamic Programming}
 \subsubsection*{Longest Increasing Subsequence: \(O(n^{2})\)}
 The following algorithm starts at one side of the list and finds the max length of sequences terminating at that given node, recursively following backlinks. Then given all the lengths of paths terminating at that given node choose the max length. Without memoization, this solution would be exponential time.
@@ -229,11 +253,64 @@ return max(L)
 
 \subsubsection*{Edit Distance (Spelling Suggestions)}
 This algorithm works by basically choosing the min of the options for every given letter. (The 3 options being adding a gap inbetween letters of one of the strings or matching the two letters and moving on.)\\
-ex) Snowy and sunny have an edit distance of 3 with this configuration
+ex) Snowy and Sunny have an edit distance of 3 with this configuration
 \begin{verbatim}
 S _ N O W Y
 S U N N _ Y
 \end{verbatim}
+% todo finish dynamic programming information
+
+\subsection*{Linear Programming}
+\subsubsection*{Properties of Linear Programs}
+\begin{enumerate}
+    \item To turn a maximization problem into a minimization (or vice versa) just multiply the coeficients of the objective function by -1.
+    \item To turn an inequality constraint like \(\sum_{i=1}^{n}a_i x_i \leq b\) into an equation, introduce a new variable S and use, \(\sum^n_{i=1}a_{i}x_{i}+s>b\), \(s \geq 0\) (S is known as a slack variable)
+    \item To change an inequality constraint into inequalities rewrite \(ax=b\),\\
+        as \(ax \leq b \texttt{ and } ax \geq b\)
+    \item If a linear program has an unbounded value then its dual must be infeasible.
+\end{enumerate}
+
+\subsubsection*{Solving Linear Programs with the Simplex method}
+typically polynomial time, but in worst case, exponential
+\begin{verbatim}
+let v be any vertex of the feasible region
+while there is a neighbor v' of v with a better value:
+    set v = v'
+return v
+\end{verbatim}
+This is easily seen in a 2d or even sometimes a 3d graph of the constraints
+
+\subsubsection*{Proving Optimality of a Linear Program Result, Duality}
+max \(x_{1}+6x_{2}\)\\
+\(\begin{array}{lc}
+    \texttt{Inequality} & \texttt{multiplier}\\
+    x_{1} \leq 200 & y_{1}\\
+    x_{2} \leq 300 & y_{2}\\
+    x_{1}+x_{2} \leq 400 & y_{3}\\
+    x_{1},x_{2} \geq 0
+\end{array}\)
+\((y_{1}+y_{2})x_{1} + (y_{2}+y_{3})x_{2} \leq 200y_{1}+300y_{2}+400y_{3}\)\\
+resulting in,\\
+\(\texttt{min } 200y_{1}+300y_{2}+400y_{3}\)\\
+\(y_{1}+y_{3} \geq 1\)\\
+\(y_{2}+y_{3} \geq 6\)\\
+\(y_{1},y_{2},y_{3} \geq 0\)\\
+Which both result in the same optimum (via simplex) thus proving optimality.
+
+\subsubsection*{Zero Sum Games}
+% todo need to add information about zero sum games
+
+\subsubsection*{Max Flow Algorithm}
+Start with zero flow.\\
+Repeat:\\
+Choose an appropriate path from s to t, and increase flow along the edges of this path as much as possible.
+
+\subsubsection*{Max Flow Min Cut Theorem}
+The size of the maximum flow in a network equals the capacity of the smallest (s,t)-cut, where and (s,t)-cut partitions the vertices into two disjoint groups L and R such that s (start) is in L and t (goal) is in R.
+
+\subsubsection*{Bipartite Matching}
+
+
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
 \scriptsize
