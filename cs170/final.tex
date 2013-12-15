@@ -309,7 +309,21 @@ Choose an appropriate path from s to t, and increase flow along the edges of thi
 The size of the maximum flow in a network equals the capacity of the smallest (s,t)-cut, where and (s,t)-cut partitions the vertices into two disjoint groups L and R such that s (start) is in L and t (goal) is in R.
 
 \subsubsection*{Bipartite Matching}
+example is given a graph with two sets, Girls and Boys where lines between the sets are who likes who. Find a graph where every Boy and Girl is matched up with someone they like. This problem reduces to a maximum-flow problem solvable by linear programming.
 
+\subsection*{NP-Complete Problems}
+\(\begin{array}{cc}
+    \texttt{Hard problems(NP-complete)} & \texttt{Easy problems (in P)}\\
+    \texttt{3SAT} & \texttt{2SAT, HORN SAT}\\
+    \texttt{Traveling Salesman Problem} & \texttt{Minimum Spanning Tree}\\
+    \texttt{Longest Path} & \texttt{Shortest Path}\\
+    \texttt{3D Matching} & \texttt{Bipartite Matching}\\
+    \texttt{Knapsack} & \texttt{Unary Knapsack}\\
+    \texttt{Independent Set} & \texttt{Independent Set on trees}\\
+    \texttt{Integer Linear Programming} & \texttt{Linear Programming}\\
+    \texttt{Rudrata Path} & \texttt{Euler Path}\\
+    \texttt{Balanced Cut} & \texttt{Minimum Cut}
+\end{array}\)
 
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
