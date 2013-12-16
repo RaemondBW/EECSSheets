@@ -106,11 +106,15 @@ inverse of a,
 for any \(a (\texttt{mod } N)\), a has a multiplicative inverse if and only if they are relatively prime, gcd(a,N) = 1
 
 \subsection*{Fermat's Little Theorem}
-% todo add the proof of this\\
 given a prime (or carmichael) p,
 \[a^{p-1} \equiv 1 (\texttt{mod } p)\]
 Proof:\\
-
+Given a set of numbers, \(S = \{1,2,\ldots,p-1\}\) modulo p, there is a 1 to 1 mapping of numbers in S to thier inverses also in S\\
+Then we can also say, \[S = \{a*1(\texttt{mod }p), a*2(\texttt{mod }p), \ldots, a*(p-1)(\texttt{mod }p)\}\]
+Multiplying all of these numbers together gives us,
+\[(p-1)! \equiv a^{p-1}\cdot(p-1)!(\texttt{mod }p)\]
+Here we can divide by \((p-1)\)! (which we can do because it is relatively prime to p)
+\[a^{p-1} \equiv 1(\texttt{mod }p)\]
 
 \subsection*{RSA Euler's Theorem}
 \[m^{(p-1)(q-1)}=1 (\texttt{mod } p)\]
