@@ -261,6 +261,163 @@ P is a public 2048 bit prime number.
     \item Discrete Logarithm Problem
         % \texttt{OUTPUT} & \texttt{the unique integer } (a<q) \texttt{ such that } h = g^{a}
 \end{itemize}
+% todo Here is where I left off need to cover midterm 2 material too
+
+\subsubsection*{Entity Authentication}
+Entity authentication is a communication process by which a principal establishes alively correspondence with a second principal whose cliamed identity should meet what is sought by the first.
+\begin{itemize}
+    \item Host-host type: for example upon a reboot the system must identify to a trusted server neccessary information (like trusted copy of OS, trusted clock setting, or 
+trusted environment settings) Client-Server setting where one host requests certain services from the other server.
+    \item User-Host type: Computer login via telnet/ssh (Authenticated through some password protocol) In serious cases mutual authentication is required.
+    \item Process-host type: used more for distributed computing. Ex. used for "mobile code" or a "browser based" java applet.
+    \item Member-club type: ex a member of a club showing a membership card for access. zero-knowledge identification protocols and undeniable signature schemes
+\end{itemize}
+\subsubsection{Manipulation Detection Code (MDC)}
+
+\subsubsection*{Lively correspondence}
+\begin{itemize}
+    \item Freshness
+        \begin{itemize}
+            \item Freshness verifies that a message was sent sufficiently recently
+            \item Data origin doesn't guarantee freshness.
+            \item This prevents attacks that involve doing large computations on a message or replay attacks.
+        \end{itemize}
+    \item nonces
+        \begin{itemize}
+            \item A random number, used for verifying a challenge response.
+            \item Simple example: bob sends a nonce to alice. Alice responds with the encrypted nonce, which was encrypted with a shared private key. If bob recieves the encrypted nonce (in a sufficiently short amount of time) and establishes it was encrypted correctly. This does not provide a proper data-integrity service.
+        \end{itemize}
+    \item timestamps
+\end{itemize}
+
+\subsubsection*{Data Origin Authentication}
+\begin{itemize}
+    \item Consists of transmitting a message from a purported source (the transmitter) to a receiver who will validate the message upon reception.
+    \item The message validation conducted by the receiver aims to establish the identity of the message transmitter.
+    \item The validation also aims to establish the data integrity of the message subsequent to its departure from the transmitter.
+    \item The validation further aims to establish liveness of the the message transmitter.
+\end{itemize}
+
+\subsubsection*{Authentication vs Key exchange}
+\begin{itemize}
+    \item Key exchange or key agreement is usually used during entity authentation or as a subtask
+\end{itemize}
+
+\subsubsection*{Challenge-response}
+\begin{itemize}
+    \item Standard vs non-standard (encryption-then-decryption) challenge-response mechanisms
+    \item Standard (as set by ISO, International Organization for Standardization and the IEC, International Electrotechnical Commission) of three challenge-response 
+system.
+\end{itemize}
+
+\subsubsection*{Unilateral Authentication}
+\begin{itemize}
+    \item Only one of the two participants is authenticated.
+\end{itemize}
+
+\subsubsection*{Mutual authentication vs. trusted third-party authentication}
+\begin{itemize}
+    \item In mutual authentication, both communicating entities are authenticated to each other.
+    \item Originally simply unilateral authentication done twice, once in each direction, until wiener's attack (the Canadian Attack)
+    \item Trusted Third Party (TTP) Authentication requires the principals to use a centralized open system from a trusted third party to authenticate.
+\end{itemize}
+
+\subsubsection*{Needham-Schroeder password protocol}
+% todo expand on this
+\begin{itemize}
+    \item Premise: User, U and Host, H have setup U's password entry (\(ID_{u},f(P*u)\)) where f is a one-way function; U memorizes password \(P_u\)
+    \item Goal: U logs in H using her/his password.
+\end{itemize}
+\begin{enumerate}
+    \item U \(\rightarrow\) H : \(ID_u\);
+    \item H \(\rightarrow\) U : "Input password:";
+    \item U \(\rightarrow\) H : \(P_u\);
+    \item H applies f on \(P_u\), finds entry (\(ID_u,f(P_u)\)) from its archive; Access is granted if the computed \(f(P_uP)\) matches the archived. Where f is a trapdoor function. In the unix password system, f is a series of 25 rounds of DES. Salt (12 bit random number) is used to randomize the flips.
+\end{enumerate}
+\begin{itemize}
+    \item Data integrity of the password storage file becomes important and the protocol is still vulnerable to online password eavesdropping attack.
+    \item One-time password scheme. In this flawed modification the number of times the hashing function is iterated one more time.
+\end{itemize}
+
+\subsection*{Passwords and salt}
+\subsubsection*{Encryted key exchange (EKE)}
+\begin{itemize}
+    \item The EKE protocol protects the password against online eavesdropping and offline dictionary attacks.
+    \item Premise: User, U and Host, H share a password \(P_u\); The system has agreed on a symmetric encryption algorithm, K() denotes symmetric encryption keyed by K; U and H also agreed on an asymmetric encryption scheme, \(E_u\) denotes asymmetric encryption under U's key.
+    \item Goal: U and H achieve mutual entity authentication, they also agree on a shared secret key.
+\end{itemize}
+\begin{enumerate}
+    \item U generates a random "public" key \(E_u\), and sends to H: U, \(P_u(E_u)\)
+    \item H decrypts the cipher chunk using \(P_u\) and retrieces \(E_u\); H generates random symmetric key, K, and sends to U: \(P_u(E_u(K))\)
+    \item U decrypts the doubly encrypted cipher chunk and obtains K; U generates a nonce \(N_u\), and sends to H: \(K(N_e)\)
+    \item H decrypts the cipher chunk using K, generate a nonce, \(N_H\), and sends to U: \(K(N_u,N_h)\)
+    \item U decrypts the cipher chunk using K, and return to H: \(K(N_h)\)
+    \item If the challenge-response in 3,4,5 is successful, logging-in is granted and the parties proceed further secure communication
+\end{enumerate}
+
+\subsection*{Attacks on authentication protocols}
+\subsubsection*{message replay attack}
+\begin{itemize}
+    \item Malice has previously recorded an old message from a previous run of a protocol and now replays the recorded message in a new run of the protocol
+    \item blocked by freshness
+\end{itemize}
+
+\subsubsection*{man-in-the-middle attack}
+Malice intercepts messages between Bob and Alice
+
+\subsubsection*{parallel session attack}
+The parallel session attack consists of two or more runs of a protocol executed concurrently under Malice's protection
+
+\subsubsection*{relection attack}
+A reflection attack is when an honest principal sends a message to an intended communication partner. Malice intercepts the message and reflects it back at the host
+
+\subsubsection*{interleaving attack}
+In an interleaving attack, two or more runs of a protocol are executed in an overlapping fashion under Malic's orchestration. Malic may compose a message and send it out to a principal in one run from which he expects to receive and answer.
+
+\subsubsection*{attack due to type flaw}
+Malice uses a flaw, including a principal being tricked to misinterpret a nonce, a timestamp or an indentification into key
+
+\subsubsection*{attack due to name omission}
+Name omission is a serious problem that could allow exploits
+
+\subsubsection*{Kerberos}
+\begin{itemize}
+    \item single signon
+        \begin{itemize}
+            \item Each user memorizes a password, this is the single-signon credential for using the Kerberos system.
+        \end{itemize}
+    \item exchanges (authentication service exchange, ticket-granting service exchange, client-server authentication application exchange)
+        \begin{itemize}
+            \item Authentication Service Exchange (AS Exchange): runs between a client, C and an "authentication server", AS
+            \item Ticket-Granting Service Exchange (TGS Exchange): runs between C and a "ticket granting server" TGS after the AS Exchange
+                \begin{itemize}
+                    \item Checks to see if the difference in time between the client time and host time are within a reasonable range for freshness.
+                \end{itemize}
+            \item Client/Server Authentication Application Exchange (AP Exchange): runs between C and an application server, S after the TGS Exchange
+                \begin{itemize}
+                    \item The AP Exchange a client, C that uses the newly obtained application session key, to obtain application services fromt he Application Servers
+                \end{itemize}
+        \end{itemize}
+    \item key distribution center (authentication server, ticket granting server)
+\end{itemize}
+
+\subsubsection*{SSL/TLS}
+\begin{itemize}
+    \item Process: *=optional
+\end{itemize}
+\begin{enumerate}
+    \item C -> S: ClientHello
+    \item S -> C: Server Hello, ServerCertificate*, ServerKeyExchange*, CertificateRequest*, ServerHelloDone
+    \item C -> S: ClientCertificate*, ClientKeyExchange, CertificateVerify*, ClientFinished
+    \item S -> C: ServerFinished
+\end{enumerate}
+\begin{itemize}
+    \item Hello Message Exchange: Server and Host let each other know what protocols they are capable of running
+    \item handshake with key exchange
+    \item crypto-suite selection, certificates
+    \item use of nonces and random secrets
+\end{itemize}
+
 
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
