@@ -109,9 +109,11 @@ for any \(a (\texttt{mod } N)\), a has a multiplicative inverse if and only if t
 % todo add the proof of this\\
 given a prime (or carmichael) p,
 \[a^{p-1} \equiv 1 (\texttt{mod } p)\]
+Proof:\\
+
 
 \subsection*{RSA Euler's Theorem}
-\[m^{(p-a)(q-1)}=1 (\texttt{mod } p)\]
+\[m^{(p-1)(q-1)}=1 (\texttt{mod } p)\]
 
 \subsection*{Master's Theorem}
 If
@@ -124,9 +126,39 @@ then,
         \end{array}
         \right.\]
 
+\subsection*{Volker Strassen}
+Divide and conquer matrix multiplication.\\
+Matrix multiplication can be broken into subproblems, because it can be performed blockwise. Ex, we can carve X into for \(n/2\) x \(n/2\) blocks
+\[X = \begin{bmatrix} A & B \\ C & D \end{bmatrix}, Y = \begin{bmatrix} E & F\\ G & H \end{bmatrix}\]
+Then the product can be expressed in terms of those blocks as if the blocks were a single element,
+\[XY = \begin{bmatrix} A & B \\ C & D \end{bmatrix} * \begin{bmatrix} E & F\\ G & H \end{bmatrix} = \begin{bmatrix} AE+BG & AF+BH \\ CE+DG & CF+DH \end{bmatrix}\]
+The runtime of this recurrence is,
+\[T(n)=8T(n/2)+O(n^{2}) \rightarrow O(n^{3})\]
+Using clever algebra, this can be improved with integer multiplication, XY can be computed from seven \(n/2\) x \(n/2\) subproblems via decomposition.
+\[XY = \begin{bmatrix} P_{5}+P_{4}-P_{2}+P_{6} & P_{1}+P_{2} \\ P_{3}+P_{4} & P_{1}+P_{5}-P_{3}+P_{7} \end{bmatrix}\]
+where,
+\[\begin{array}{ll}
+        P_{1}=A(F-H) & P_{2}=(A+B)H\\
+        P_{3}=(C+D)E & P_{4}=D(G-E)\\
+        P_{5}=(A+D)(E+H) & P_{6}(B-D)(G+H)\\
+        P_{7}=(A-C)(E+F) & \texttt{ }
+\end{array}\]
+and has a runtime of
+\[T(n)=7T(n/2)+O(n^{2}) \rightarrow O(n^{log_{2}7}) \approx O(n^{2})\]
+
 \subsection*{Fast Fourier Transform}
-not done yet
-% todo Add FFT Information Here
+complex \(n^{th}\) roots of unity are given by \(e^{\frac{2 \pi i}{n}}\)
+The Vandermonde Matrix,
+\[M_{n}(\omega) =
+    \begin{bmatrix}
+        1 & 1 & 1 & \cdots & 1\\
+        1 & \omega & \omega^{2} & \cdots & \omega^{n-1}\\
+        1 & \omega^{2} & \omega^{4} & \cdots & \omega^{2(n-1)}\\
+        \vdots & \vdots & \vdots & \ddots & \vdots\\
+        1 & \omega^{j} & \omega^{2j} & \cdots & \omega^{(n-1)j}\\
+        \vdots & \vdots & \vdots & \ddots & \vdots\\
+        1 & \omega^{(n-1)} & \omega^{2(n-1)} & \cdots & \omega^{(n-1)(n-1)}
+\end{bmatrix}\]
 
 \subsection*{Search Algorithms}
 \subsubsection*{Depth First Search}
@@ -324,6 +356,7 @@ example is given a graph with two sets, Girls and Boys where lines between the s
     \texttt{Rudrata Path} & \texttt{Euler Path}\\
     \texttt{Balanced Cut} & \texttt{Minimum Cut}
 \end{array}\)
+SAT Search Algorithm Time
 
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
