@@ -190,7 +190,6 @@ def dfs(G):
 Previsit = count till node added to the queue\\
 Postvisit = count till you leave the given node\\
 A directed Graph has a cycle if it has a back edge found during DFS
-
 \subsubsection*{Breadth First Search}
 \begin{verbatim}
 def bfs(G,s):
@@ -360,7 +359,52 @@ ex) Snowy and Sunny have an edit distance of 3 with this configuration
 S _ N O W Y
 S U N N _ Y
 \end{verbatim}
-% todo finish dynamic programming information
+\begin{verbatim}
+for i = 0,1,2,...,m:
+    E(i,0) = i
+for j = 1,2,...,n:
+    E(0,j) = j
+for i = 1,2,...,m:
+    for j = 1,2,...,n:
+        E(i,j) = min{E(i-1,j)+1,E(i,j-1)+1,E(i-1,j-1)
+                    +diff(i,j)}
+return E(m,n)
+\end{verbatim}
+
+\subsubsection*{Knapsack \(O(nW)\)}
+Items have a weight and a value, you want to maximize the value within a given weight. (The amount you can carry in your knapsack)\\
+With repetition:
+\[K(\omega)=max_{\texttt{items}}\{K(\omega-\omega_{\texttt{item}})+value\}\]
+Without repetition:
+\[K(\omega,j)=max_{\texttt{available items}}\{K(\omega-\omega_{j},j-1)+V_{j},k(\omega, j-1)\}\]
+
+\subsubsection*{Chain Matrix Multiplication \(O(n^3)\)}
+\[C(i,j)=min\{C(i,k)+c(k+1,j)+m_{i-1}\cdot m_{k} \cdot m_{j}\}\]
+
+\subsubsection*{Floyd-Warshall Algorithm for Shortest Paths \(O(|V|^{3})\)}
+\begin{verbatim}
+for i=1 to n:
+    for j=1 to n:
+        dist(i,j,0) = infinity
+        for all (i,j) in E:
+            dist(i,j,0) = l(i,j)
+for k = 1 to n:
+    for i = 1 to n:
+        for j = 1 to n:
+            dist(i,j,k) = min{dist(i,k,k-1)+
+                        dist(k,j,k-1),dist(i,j,k-1)}
+\end{verbatim}
+
+\subsubsection*{Traveling Salesman Problem \(O(n^{2}2^{n})\)}
+\begin{verbatim}
+C({1},1)=0
+for s = 2 to n:
+    for all subsets S in {1,2,...,n} of size s and has l:
+        C(S,1) = infinity
+        for all j in S,j != 1:
+            C(S,j) = min{C(S-{j},i)+dij:i in S,i not in j}
+return min over j, C({1,...,n},j)+dj1
+\end{verbatim}
 
 \subsection*{Linear Programming}
 \subsubsection*{Properties of Linear Programs}
