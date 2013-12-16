@@ -81,6 +81,13 @@
     \Large{\underline{CS 170 Final Cheat Sheet}} \\
 \end{center}
 
+\subsection*{Formal Limit Definition of \(O, \Theta, \texttt{and } \Omega\)}
+\[\lim_{n \rightarrow \infty}\frac{f(n)}{g(n)}\left\{\begin{array}{lr}
+            \geq 0(\infty) & f(n) \in \Omega(g(n))\\
+            < \infty(0) & f(n) \in O(g(n))\\
+            = c, 0 < c < \infty & f(n) \in \Theta(g(n))
+    \end{array}\right.\]
+
 \subsection*{Euclid's GCD: \(O(n^{3})\)}
 \begin{verbatim}
 def gcd(a,b):
@@ -184,9 +191,48 @@ Previsit = count till node added to the queue\\
 Postvisit = count till you leave the given node\\
 A directed Graph has a cycle if it has a back edge found during DFS
 
+\subsubsection*{Breadth First Search}
+\begin{verbatim}
+def bfs(G,s):
+    for all u in V:
+        dist(u) = infinity
+    dist(s) = 0
+    Q = [s] (Queue containing just s)
+    while Q is not empty:
+        u = eject(u)
+        for all edges (u,v) in E:
+            if dist(v) = infinity:
+                inject(Q,v)
+                dist(v) = dist(u) + 1
+\end{verbatim}
+
+\subsubsection*{Dijkstra's Algorithm}
+\begin{verbatim}
+def dijkstra(G,l,s):
+    for all u in V:
+        dist(u) = infinity
+        prev(u) = nil
+    dist(s) = 0
+    H = makequeue(V) # using dist values as keys
+    while H is not empty:
+        u = deletemin(H)
+        for all edges (u,v) in E:
+            if dist(v) > dist(u)+l(u,v)
+                dist(v) = dist(u)+l(u,v)
+                prev(v) = u
+                decreasekey(H,v)
+\end{verbatim}
+
 \subsection*{Directed Acyclic Graphs}
-Every DAG has a source and sink\\
-% todo add more properties
+\begin{itemize}
+    \item Every DAG has a source and sink
+    \item A directed graph has a cycle if and only if its depth-first search reveals a back edge.
+    \item In a DAG, every edge leads to a vertex with a lower post number.
+    \item Every directed graph is a DAG of its strongly connected components.
+    \item If the explore subroutine is started at node u, then it will terminate precisely when all nodes reachable from u have been visited
+    \item The node that receives the highest post number in a depth-first search must lie in a source strongly connected component
+    \item I C and C' are strongly connected components, and there is an edge from a node in C to a node in C', the the highest post number in C is bigger than the highest post number in C'.
+\end{itemize}
 
 \subsection*{Greedy Algorithms}
 \subsubsection*{Kruskal's MST Algorithm \(O(E\log{v})\)}
@@ -272,8 +318,7 @@ Repeat until all elements of B are covered:
 \end{verbatim}
 
 \subsubsection*{Disjoint Sets Data Structure}
-asdfjkl;
-% todo
+
 
 \subsection*{Dynamic Programming}
 \subsubsection*{Longest Increasing Subsequence: \(O(n^{2})\)}
