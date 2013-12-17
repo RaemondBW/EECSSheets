@@ -394,9 +394,9 @@ Data Integrity is the security service against unauthorized modification of mess
 \subsection*{Symmetric Techniques of Data Integrity}
 A MDC is another term for a Message Authentication Code (MAC). A Mac can be created an verified using a keyed hash function technique, or using a block cipher encryption algorithm.
 \subsubsection*{Cryptographic Hash Functions}
-A Hash function is a deterministic function which maps a bit string of an arbitrary length to a hashed value which is a vit string of a fixed length.\\
-\vspace{2 mm}
-Properties of a Hash Function
+A Hash function is a deterministic function which maps a bit string of an arbitrary length to a hashed value which is a vit string of a fixed length.
+
+\subsubsection*{Properties of a Hash Function}
 \begin{itemize}
     \item Mixing-transformation\\
         On any input x, the output hashed value h(x) should be computationally indistinguishable from a uniform binary string.
@@ -408,8 +408,57 @@ Properties of a Hash Function
         Given input string x, the computation of \(h(x)\) can be done in time bounded by a small-degree polynomial (ideally linear)
 \end{itemize}
 
-% todo Here is where I left off covering midterm 2 material
+\subsubsection*{Hash Function Applications}
+\begin{itemize}
+    \item In digital signatures, hash functions are generally used for generating "message digests" or "message fingerprints."
+    \item In public-key cryptosystems, has functions are widely used for realizing a cipher text correctness verification mechanism. This is necessary to protect an encryption scheme from active attackers.
+    \item Hash Functions are used in wide range of applications, pseudo-randomness is required.
+\end{itemize}
 
+\subsubsection*{Random Oracle}
+A Random Oracle is a very powerful and imaginary function that occurs if on any input, the distribution of the output hashed value is uniform.
+
+\subsubsection*{Birthday Attack}
+Assuming a hash function behaves as a random oracle, the square-root attack (birthday attack) suggests that,
+\[2^{|h|/2}=\sqrt{2^{|h|}}\]
+random evaluations of the hash function will suffice an attacker to obtain a collision with a non-negligible probablility. To mount the attack, the attacker should generate random message-hash pairs.
+\[(m_{1},h(m_{1})),(m_{2},h(m_{2})), \ldots\]
+until he ends up with finding two messages m and m' satisfying,
+\[m \neq m',\texttt{ } h(m)=h(m')\]
+This is only really usefull if the hashed message contains a meaningful sub-message.
+
+\subsubsection*{MAC based Keyed Hash Function}
+In a shared-key scenario a hash function takes a key as part of its input.
+\[\texttt{MAC}=h(k \| M)\]
+Where k is a secret key shared between the transmitter and receiver. \((\| = \texttt{concatenation})\)\\
+The receiver should then recalculate the MAC from the message. If they match, then the message is believed to have come from the transmitter. In order for the receiver to verify itself to the sender, we must compute the HMAC,
+\[\texttt{HMAC}=h(k \| M \| k)\]
+
+\subsubsection*{MAC based on Block Cipher Encryption}
+Let \(E_{k}(m)\) denote a block cipher encryption algorithm keyed with the key, k, on the input message, m. In order to authenticate a message, M, we need to divide M.
+\[M = m_{1}m_{2}\ldots m_{l}\]
+Where each sub-message block \(m_{i}, i=1,2,\dots,l\) has the size of the input of the block cipher algorithm. Let \(C_{0}=IV\) be a random initializing vector. Here the transmitter applies the CBC encryption:
+\[C_{i} \leftarrow E_{k}(m_{i} \oplus C_{i-1}), i=1,2,\ldots,l\]
+Then pair,
+\[(IV,C_{l})\]
+
+\subsection*{Digital Signatures}
+\subsubsection*{the RSA Signature Scheme}
+\begin{itemize}
+    \item Key setup\\
+        The key setup is identical to that of standard RSA cryptosystems.
+    \item Signature Generation\\
+        To create a signature of message, m, Alice create,
+        \[s = \texttt{Sign}_{e}(m) \leftarrow m^{e}(\texttt{mod }N)\]
+    \item Signature Verification\\
+        Let Bob be a verifier who knows that the public-key material (N,e) belongs to Alice. Given a message-signature pair (m,s), Bob's verification procedture is,
+        \[\texttt{Verify}_{(N,d)}(m,s) = \texttt{True if } m \equiv s^{d}(\texttt{mod }N)\]
+\end{itemize}
+
+\subsubsection*{Non-repudiation}
+Non-repudiation is basically the idea that if there is a single entity responsible for creating a digital signature, then it is easy to settle disputes over who has created the signature. No denial of connection with a message.
+
+% todo begining of midterm 3 material
 \subsubsection*{Entity Authentication}
 Entity authentication is a communication process by which a principal establishes alively correspondence with a second principal whose cliamed identity should meet what is sought by the first.
 \begin{itemize}
