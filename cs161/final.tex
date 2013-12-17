@@ -221,7 +221,7 @@ Different modes of operation have been devised on top of an underlying block cip
     \item Passive Attacker: The attacker doesn't modify or manipulate ciphertexts they also don't ask for encryption or Decryption services. % todo check definition and move to it's own section
 \end{itemize}
 
-\subsubsection*{Diffie-Hellman Key Exchange Protocol}
+\subsection*{Diffie-Hellman Key Exchange Protocol}
 \(\begin{array}{ll}
     \texttt{Common Input} & (p,g):p \texttt{ is a large prime, g is a generator}\\
     \texttt{ } & \texttt{element in } F_{p}^{*}\\
@@ -253,15 +253,109 @@ P is a public 2048 bit prime number.
 
 \subsubsection*{Diffie-Helman and the Discrete Logarithm Problem}
 \begin{itemize}
-    \item Computational Diffie-Hellman Problem
-        % \(\begin{array}{ll}
-        %     \texttt{INPUT} & \texttt{desc}(F_{q}): \texttt{the description of finite field } F_{q}
-        %     \texttt{ } & g \in F^{*}_{q:a}
-        % \end{arry}\)
+    \item Computational Diffie-Hellman (CDH) Problem
+        \(\begin{array}{ll}
+            \texttt{INPUT} & \texttt{desc}(F_{q}): \texttt{a finite field } F_{q}\\
+            \texttt{ } & g^{a},g^{b} \in F^{*}_{q} \texttt{for some integers } 0<a,b<q\\
+            \texttt{OUTPUT} & g^{ab}
+        \end{array}\)
     \item Discrete Logarithm Problem
-        % \texttt{OUTPUT} & \texttt{the unique integer } (a<q) \texttt{ such that } h = g^{a}
+        \(\begin{array}{ll}
+            \texttt{INPUT} & \texttt{desc}(F_{q}): \texttt{a finite field } F_{q}\\
+            \texttt{ } & g \in F_{q}^{*}\\
+            \texttt{ } & h \in F_{q}^{*}\\
+            \texttt{OUTPUT} & \texttt{the unique integer } (a<q) \texttt{ such that } h = g^{a}
+        \end{array}\)
 \end{itemize}
-% todo Here is where I left off need to cover midterm 2 material too
+If the Discrete Logarithm Problem is solved, then the CDH Problem is also solved. But not necessarily vice versa.
+
+\subsubsection*{Eulers Theorem}
+given a,n are coprime,\\
+\(a^{\phi(n)}=1(\texttt{mod }n)\)
+
+\subsubsection*{Fermat's Little Theorem}
+given a coprime to N,\\
+\(a^{(N-1)}=1(\texttt{mod }N)\), \(a \in \mathbb{Z}<N\)
+
+\subsection*{Cryptanalysis Against Public-key Cryptosystems}
+\subsubsection*{Chosen-Plain Text Attack (CPA)}
+\begin{itemize}
+    \item An attack chooses a plaintext messages and gets encryption assistance to obtain the corresponding ciphertext messages. The task for the attacker is to weaken the targeted cryptosystem using the obtained plain-text pairs.
+    \item The attacker has an encryption box.
+    \item All public key encryption systems must resist CPA otherwise it is useless.
+\end{itemize}
+
+\subsubsection*{Chosen-Ciphertext Attack (CCA)}
+\begin{itemize}
+    \item An attacker chooses ciphertext messages and gets decryption assistance to obtain the corresponding plaintext messages. The task for the attacker is to weaken the targeted cryptosystem using the obtained plaintext-ciphertext pairs. The attacker is successful if he can retrieve some secret plaintext information from a "target ciphertext" which is given to the attacker after the decryption assistance is stopped. That is, upon the attacker receipt of the target ciphertext, the decryption assistance is no longer available.
+    \item The attacker is entitled to a conditional use of a decryption box. The box turns off before the ciphertext is sent.
+\end{itemize}
+
+\subsubsection*{Adaptive Chosen-Ciphertext Attack (CCA2)}
+\begin{itemize}
+    \item This is a CCA where the decryption assistance for the targeted cryptosystem will be available forever, except for the target ciphertext.
+    \item The attacker has the decryption box for as long as he wishes, except they can't decipher the original message.
+\end{itemize}
+
+\subsubsection*{RSA Cryptosystem}
+\begin{itemize}
+    \item Key Setup
+    \begin{enumerate}
+        \item Choose two random prime numbers p and q (typically done by applyling a Monte-Carlo prime number finding algorithm.
+        \item Compute \(N=pq\)
+        \item Compute \(\phi(N) = (p-1)(q-1)\)
+        \item Choose a random integer \(e < \phi(N)\) such that gcd\((e,\phi(n))=1\), and compute the integer d, such that,
+            \[ed \equiv 1 (\texttt{mod }\phi(N))\]
+        \item Publicize (N,e) as the public key, safely destroy p, q, and \(\phi(N)\), and keep d as the private key.
+    \end{enumerate}
+    \item Encryption\\
+    To send a confidential message \(m<N\) to Alice, the sender Bob creates the ciphertext c as follows,
+        \[c \leftarrow m^{e}(\texttt{mod }N)\]
+    \item Decryption\\
+    To decrypt the ciphertext c, Alice computes,
+        \[m \leftarrow c^{d}(\texttt{mod }N)\]
+\end{itemize}
+
+\subsubsection*{Proof of RSA}
+\(m = (m^{e})^{d} \texttt{mod } N\)\\
+\(m = m^{e^{d}}\texttt{mod }N \texttt{, because } ed=1\texttt{mod } \phi(N)\)\\
+\(ed = a+k\phi(N)\)\\
+\(m = m^{1+k\phi(N)}\texttt{mod }N\)\\
+\(m = m(m^{\phi(N)})^{k}\texttt{mod }N\)\\
+\(m = m(\texttt{mod }N), \texttt{ iff } gcd(m,N)=1\)
+
+\subsubsection*{RSA Problem and the Integer Factorization Problem}
+\begin{itemize}
+    \item The RSA Problem
+        \(\begin{array}{ll}
+            \texttt{INPUT} & N=pq \texttt{with } p,q \texttt{ prime numbers}\\
+            \texttt{ } & e \texttt{: and integer such that,}\\
+            \texttt{ } & \texttt{ } gcd(e, (p-1)(q-1)) = 1\\
+            \texttt{ } & c \in Z^{*}_{N}\\
+            \texttt{OUTPUT} & \texttt{the unique integer } m \in Z^{*}_{N} \texttt{ satisfying,}\\
+            \texttt{ } & \texttt{ } m^{e} \equiv c(\texttt{mod }N)
+        \end{array}\)
+    \item The Integer Factorization Problem
+        \(\begin{array}{ll}
+            \texttt{INPUT} & N \texttt{: odd composite integer with at least two}\\
+            \texttt{ } & \texttt{distict prime factors.}\\
+            \texttt{OUTPUT} & \texttt{prime p such that } p|N\\
+        \end{array}\)
+    \item The difficulty of the RSA problem depends, in turn, on the difficulty of the integer factorization problem.
+\end{itemize}
+
+\subsubsection*{RSA Euler's Theorem}
+\(m^{p-1)(q-1)} \equiv 1(\texttt{mod }pq)\)
+
+\subsubsection*{Insecurity of Textbook RSA Encryption}
+\begin{itemize}
+    \item The RSA Cryptosystem is "all-or-nothing" secure against CPA if and only if the RSA assumption holds, meaning if the attacker has some prior knowledge of the contents of a message (ex a number or bid), they may be able to successfully bruteforce a solution.\\
+        \vspace{2 mm}
+        For a plaintext m (\textless N), with a non-negligible probability, only \(\sqrt{m}\) trials are needed to pinpoint m if \(\sqrt{m}\) size of memory is available, exploiting,
+        \[(m_{1}\cdot m_{2})^{e} \equiv m_{1}^{e} \cdot m_{2}^{e} (\texttt{mod }N)\]
+\end{itemize}
+
+% todo Here is where I left off covering midterm 2 material
 
 \subsubsection*{Entity Authentication}
 Entity authentication is a communication process by which a principal establishes alively correspondence with a second principal whose cliamed identity should meet what is sought by the first.
@@ -269,8 +363,8 @@ Entity authentication is a communication process by which a principal establishe
     \item Host-host type: for example upon a reboot the system must identify to a trusted server neccessary information (like trusted copy of OS, trusted clock setting, or 
 trusted environment settings) Client-Server setting where one host requests certain services from the other server.
     \item User-Host type: Computer login via telnet/ssh (Authenticated through some password protocol) In serious cases mutual authentication is required.
-    \item Process-host type: used more for distributed computing. Ex. used for "mobile code" or a "browser based" java applet.
-    \item Member-club type: ex a member of a club showing a membership card for access. zero-knowledge identification protocols and undeniable signature schemes
+    \item Process-host type: used more for distributed computing. Ex) used for "mobile code" or a "browser based" java applet.
+    \item Member-club type: ex a member of a club showing a membership card for access. Zero-knowledge identification protocols and undeniable signature schemes
 \end{itemize}
 \subsubsection{Manipulation Detection Code (MDC)}
 
@@ -315,7 +409,7 @@ system.
     \item Only one of the two participants is authenticated.
 \end{itemize}
 
-\subsubsection*{Mutual authentication vs. trusted third-party authentication}
+\subsubsection*{Mutual authentication vs trusted third-party authentication}
 \begin{itemize}
     \item In mutual authentication, both communicating entities are authenticated to each other.
     \item Originally simply unilateral authentication done twice, once in each direction, until wiener's attack (the Canadian Attack)
@@ -406,10 +500,10 @@ Name omission is a serious problem that could allow exploits
     \item Process: *=optional
 \end{itemize}
 \begin{enumerate}
-    \item C -> S: ClientHello
-    \item S -> C: Server Hello, ServerCertificate*, ServerKeyExchange*, CertificateRequest*, ServerHelloDone
-    \item C -> S: ClientCertificate*, ClientKeyExchange, CertificateVerify*, ClientFinished
-    \item S -> C: ServerFinished
+    \item \(C \rightarrow S\): ClientHello
+    \item \(S \rightarrow C\): Server Hello, ServerCertificate*, ServerKeyExchange*, CertificateRequest*, ServerHelloDone
+    \item \(C \rightarrow S\): ClientCertificate*, ClientKeyExchange, CertificateVerify*, ClientFinished
+    \item \(S \rightarrow C\): ServerFinished
 \end{enumerate}
 \begin{itemize}
     \item Hello Message Exchange: Server and Host let each other know what protocols they are capable of running
