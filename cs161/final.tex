@@ -78,7 +78,7 @@
 \setlength{\columnsep}{2pt}
 
 \begin{center}
-    \Large{\underline{CS 161 Final Cheat Sheet}} \\
+    \Large{\underline{CS 161 Final Note Sheet}} \\
 \end{center}
 
 \subsubsection*{Kerchoff's Principle}
@@ -353,6 +353,59 @@ given a coprime to N,\\
         \vspace{2 mm}
         For a plaintext m (\textless N), with a non-negligible probability, only \(\sqrt{m}\) trials are needed to pinpoint m if \(\sqrt{m}\) size of memory is available, exploiting,
         \[(m_{1}\cdot m_{2})^{e} \equiv m_{1}^{e} \cdot m_{2}^{e} (\texttt{mod }N)\]
+    \item Let \(c = m^{e}(\texttt{mod N})\) such that Malice knows \(m<2\). With non-negligible probability m is a composite number satisfying,
+        \[m = m_{1} \cdot m_{2} \texttt{ with } m_{1},m_{2} < 2^{\frac{l}{2}}\]
+        and with RSA's multiplicative property, we have,
+        \[c = m_{1}^{e} \cdot m_{2}^{e}(\texttt{mod }N)\]
+        Malice can build a sorted database
+        \[\{1^{e},2^{e},\ldots,(2^{\frac{l}{2}})^{e}\}(\texttt{mod }N)\]
+        Then they can search through the sorted database trying to find \(c/i^{e}(\texttt{mod }N)\) for \(i=1,2,\ldots,2^{\frac{l}{2}}\) a finding signaled by,
+        \[c/i^{e} \equiv j^{e}(\texttt{mod }N)\]
+        Acheiving a square-root level reduction in time complexity.
+    \item Let Malice be in conditional control of Alice's RSA decryption box. If the ciphertext submitted by Malice is not meaningful, then Alice should return the plaintext to Malice. This is reasonable because of the following:
+        \begin{enumerate}
+            \item "A random response for a random challenge" is a standard mode of operation in many cryptographic protocols. (including in the Needham-Schroeder protocol)
+            \item This random-looking decryption result should not provide an attacker with any useful information.
+        \end{enumerate}
+        Malice wants to know the plaintext of a ciphertext \(c \equiv m^{e}(\texttt{mod }N)\) which he has eavesdropped.\\
+        \vspace{2 mm}
+        He picks a random number, \(r \in Z^{*}_{N}\), and computes \(c'=r^{e}c(\texttt{mod }N)\) and sends his chosen cipher text, c', to Alice. Alice will return,
+        \[c'^{d} \equiv rm(\texttt{mod }N)\]
+        Which will appear completely random to Alice.\\
+        Then because Malice has r, he can obtain m with a division modulo N.
+\end{itemize}
+
+\subsection*{Data Integrity}
+Data Integrity is the security service against unauthorized modification of messages.
+\subsubsection*{Manipulation Detection Codes (MDC)}
+\begin{itemize}
+    \item Let \(K_{e}\) denote an encoding key and \(K_{v}\) denote a verification key which matches the encoding key.\\
+    \item Manipulation Detection Code creation:
+        \[\texttt{MDC} \leftarrow f(K_{e},\texttt{Data})\]
+    \item Manipulation Detection Code verification:
+        \[g(K_{v},\texttt{Data},\texttt{MDC})
+        =\left\{\begin{array}{ll}
+                \texttt{True} & \texttt{if MDC}=f(K_{e},\texttt{Data})\\
+                \texttt{False} & \texttt{if MDC}\neq f(K_{e},\texttt{Data})
+            \end{array}\right.\]
+\end{itemize}
+\includegraphics[scale=.4]{DataIntegrity}
+
+\subsection*{Symmetric Techniques of Data Integrity}
+A MDC is another term for a Message Authentication Code (MAC). A Mac can be created an verified using a keyed hash function technique, or using a block cipher encryption algorithm.
+\subsubsection*{Cryptographic Hash Functions}
+A Hash function is a deterministic function which maps a bit string of an arbitrary length to a hashed value which is a vit string of a fixed length.\\
+\vspace{2 mm}
+Properties of a Hash Function
+\begin{itemize}
+    \item Mixing-transformation\\
+        On any input x, the output hashed value h(x) should be computationally indistinguishable from a uniform binary string.
+    \item Collision Resistance\\
+        It should be computationally infeasible to find two inputs x,y with \(x \neq y\) such that \(h(x)=h(y)\)
+    \item Pre-image resistance\\
+        Given a hashed value h, it should be computationally infeasible to find an input string such that \(h=h(x)\)
+    \item Practical efficiency\\
+        Given input string x, the computation of \(h(x)\) can be done in time bounded by a small-degree polynomial (ideally linear)
 \end{itemize}
 
 % todo Here is where I left off covering midterm 2 material
@@ -366,8 +419,8 @@ trusted environment settings) Client-Server setting where one host requests cert
     \item Process-host type: used more for distributed computing. Ex) used for "mobile code" or a "browser based" java applet.
     \item Member-club type: ex a member of a club showing a membership card for access. Zero-knowledge identification protocols and undeniable signature schemes
 \end{itemize}
-\subsubsection{Manipulation Detection Code (MDC)}
 
+\subsubsection{Manipulation Detection Code (MDC)}
 \subsubsection*{Lively correspondence}
 \begin{itemize}
     \item Freshness
