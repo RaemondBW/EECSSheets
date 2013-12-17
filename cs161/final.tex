@@ -502,8 +502,27 @@ trusted environment settings) Client-Server setting where one host requests cert
 \subsubsection*{Challenge-response}
 \begin{itemize}
     \item Standard vs non-standard (encryption-then-decryption) challenge-response mechanisms
-    \item Standard (as set by ISO, International Organization for Standardization and the IEC, International Electrotechnical Commission) of three challenge-response 
-system.
+    \item Standard (as set by ISO, International Organization for Standardization and the IEC, International Electrotechnical Commission) of three challenge-response system.
+    \item Non Standard with Symmetric Cryptography\\
+        \begin{enumerate}
+            \item \(\texttt{Bob} \rightarrow \texttt{Alice: }N_{B}\)
+            \item \(\texttt{Alice} \rightarrow \texttt{Bob: }M,\texttt{MDC}(K_{AB},M,N_{B})\)\\
+            \item \(\texttt{Bob reconstructs MDC}(K_{AB},M<N_{B}) \texttt{ and}\)\\
+                \(\left\{\begin{array}{ll}
+                        \texttt{accepts} & \texttt{if two MDCs are identical}\\
+                        \texttt{rejects} & \texttt{otherwise}
+                    \end{array}\right.\)
+        \end{enumerate}
+    \item Non Standard with Asymmetric Cryptography\\
+        \begin{enumerate}
+            \item \(\texttt{Bob} \rightarrow \texttt{Alice: } N_{B}\)
+            \item \(\texttt{Alice} \rightarrow \texttt{Bob: sig}_{A}(M,N_{B})\)
+            \item Bob verifies the signature using his nonce and\\
+                \(\left\{\begin{array}{ll}
+                        \texttt{accepts} & \texttt{if signature verification passes}\\
+                        \texttt{rejects} & \texttt{otherwise}
+                    \end{array}\right.\)
+        \end{enumerate}
 \end{itemize}
 
 \subsubsection*{Unilateral Authentication}
@@ -516,14 +535,30 @@ system.
     \item In mutual authentication, both communicating entities are authenticated to each other.
     \item Originally simply unilateral authentication done twice, once in each direction, until wiener's attack (the Canadian Attack)
     \item Trusted Third Party (TTP) Authentication requires the principals to use a centralized open system from a trusted third party to authenticate.
+    \item One of the ISO and IEC standards for mutual authentication is the "ISO public Key Three-Pass Mutual Authentication Protocol"\\
+        \(\begin{array}{ll}
+            \texttt{PREMISE:} & \texttt{A has a public key certificate Cert}_{A}\\
+            \texttt{ } & \texttt{B has a public key certificate Cert}_{B}\\
+            \texttt{GOAL} & \texttt{They achieve mutual authentication}
+        \end{array}\)\\
+        \begin{enumerate}
+            \item \(B \rightarrow A: R_{B}\)
+            \item \(A \rightarrow B: \texttt{ Cert}_{A},\texttt{ Token }AB\)
+            \item \(B \rightarrow A: \texttt{ Cert}_{B}, \texttt{ Token }BA\)
+        \end{enumerate}
+        Here,
+        \[\texttt{Token } AB = R_{A} || R_{B} || B || \texttt{sig}_{A}(R_{A}||R_{B}||B)\]
+        \[\texttt{Token } BA = R_{B} || R_{A} || A || \texttt{sig}_{B}(R_{B}||R_{A}||A)\]
 \end{itemize}
 
 \subsubsection*{Needham-Schroeder password protocol}
 % todo expand on this
-\begin{itemize}
-    \item Premise: User, U and Host, H have setup U's password entry (\(ID_{u},f(P*u)\)) where f is a one-way function; U memorizes password \(P_u\)
-    \item Goal: U logs in H using her/his password.
-\end{itemize}
+\(\begin{array}{ll}
+    \texttt{Premise: } & \texttt{User, U and Host, H have setup U's password}\\
+    \texttt{ } & \texttt{entry } (ID_{u},f(P*u)) \texttt{where f is a one-way}\\
+    \texttt{ } & \texttt{function; U memorizes password } P_u\\
+    \texttt{Goal: } & \texttt{U logs in H using her/his password.}
+\end{array}\)
 \begin{enumerate}
     \item U \(\rightarrow\) H : \(ID_u\);
     \item H \(\rightarrow\) U : "Input password:";
@@ -536,6 +571,24 @@ system.
 \end{itemize}
 
 \subsection*{Passwords and salt}
+\subsubsection*{S/Key Protocol}
+\(\begin{array}{ll}
+    \texttt{PREMISE:} & \texttt{User U and Host H have setup U's initial}\\
+    \texttt{ } & \texttt{password entry }(ID_{U},f^{n}(P_{U}),n) \texttt{where f is a}\\
+    \texttt{ } & \texttt{cryptographic hash function; U memorizes}\\
+    \texttt{ } & \texttt{password } P_{U}\\
+    \texttt{GOAL:} & \texttt{U authenticates to H without transmitting } P_{U}\\
+    \texttt{ } & \texttt{in cleartext}
+\end{array}\)
+\begin{enumerate}
+    \item \(U \rightarrow H: ID_{U}\)
+    \item \(H \rightarrow U:c\), "Input Password"
+    \item \(U \rightarrow H: Q=f^{c-1}(P_{U})\)
+    \item H finds entry \((ID_{U},f^{c}(P_{U}),c)\) from its archive\\
+        Access is granted if \(f(Q)=f^{c}(P_{U})\), and U's password entry is updated to\\
+        \((ID_{U},Q,c-1)\)
+\end{enumerate}
+
 \subsubsection*{Encryted key exchange (EKE)}
 \begin{itemize}
     \item The EKE protocol protects the password against online eavesdropping and offline dictionary attacks.
@@ -552,28 +605,33 @@ system.
 \end{enumerate}
 
 \subsection*{Attacks on authentication protocols}
-\subsubsection*{message replay attack}
+\subsubsection*{Message Replay Attack}
 \begin{itemize}
     \item Malice has previously recorded an old message from a previous run of a protocol and now replays the recorded message in a new run of the protocol
     \item blocked by freshness
 \end{itemize}
 
-\subsubsection*{man-in-the-middle attack}
+\subsubsection*{Man-in-the-Middle Attack}
 Malice intercepts messages between Bob and Alice
 
-\subsubsection*{parallel session attack}
-The parallel session attack consists of two or more runs of a protocol executed concurrently under Malice's protection
+\subsubsection*{Parallel Session Attack}
+The parallel session attack consists of two or more runs of a protocol executed concurrently under Malice's protection\\
+An Attack on the S/KEY Protocol:
+\begin{center}
+\includegraphics[scale=.4]{ParallelSessionAttack}
+\end{center}
+Result: Malice has \(f^{c-2}(P_{U})\) which he can use for logging-ing in the name of U
 
-\subsubsection*{relection attack}
+\subsubsection*{Reflection Attack}
 A reflection attack is when an honest principal sends a message to an intended communication partner. Malice intercepts the message and reflects it back at the host
 
-\subsubsection*{interleaving attack}
+\subsubsection*{Interleaving Attack}
 In an interleaving attack, two or more runs of a protocol are executed in an overlapping fashion under Malic's orchestration. Malic may compose a message and send it out to a principal in one run from which he expects to receive and answer.
 
-\subsubsection*{attack due to type flaw}
+\subsubsection*{Attack Due to Type Flaw}
 Malice uses a flaw, including a principal being tricked to misinterpret a nonce, a timestamp or an indentification into key
 
-\subsubsection*{attack due to name omission}
+\subsubsection*{Attack Due to Name Omission}
 Name omission is a serious problem that could allow exploits
 
 \subsubsection*{Kerberos}
@@ -582,6 +640,11 @@ Name omission is a serious problem that could allow exploits
         \begin{itemize}
             \item Each user memorizes a password, this is the single-signon credential for using the Kerberos system.
         \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=.33]{KerberosExchange}
+\end{center}
+\begin{itemize}
     \item exchanges (authentication service exchange, ticket-granting service exchange, client-server authentication application exchange)
         \begin{itemize}
             \item Authentication Service Exchange (AS Exchange): runs between a client, C and an "authentication server", AS
@@ -614,6 +677,72 @@ Name omission is a serious problem that could allow exploits
     \item use of nonces and random secrets
 \end{itemize}
 
+\subsection*{Access Control}
+\subsubsection*{Access Control Matrix}
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    & Asset 1 & Asset 2 & file & device\\
+    \hline
+    \hline
+    Role 1 & read,write,execute,own & execute & read & write\\
+    \hline
+    Role 2 & read & read,execute & & \\
+    \hline
+\end{tabular}
+
+\subsubsection*{Simple Access Control List}
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+User & Accounting Data\\
+\hline
+Sam & rw\\
+Alice & rw\\
+Bob & r\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection*{Middleware}
+Doing access control at the level of files and programs has grown dramatically in complexity over the years. Middleware is an attempt to provide authentication inside programs or databases.
+
+\subsubsection*{Object Request Brokers (ORBs)}
+an ORB is a software component that mediates communications between objects (object as in OOP).\\
+Languages have been created to express security policies, this was specifically driven by the defence and rights management industies.
+
+\subsubsection*{Sandboxing}
+Starting with Java, another means to implement access control is through a software sandbox. Code is stuck in and executed in an interpreter, the Java Virtual Machine (JVM)
+
+\subsubsection*{Virtualization}
+Virtualization refers to systems that enable a single machine to emulate a number of machines independently. At the client end, virtualization allows people to run a host operating system on top of a guest (for example Linux on top of OSX).
+
+\subsubsection*{Trusted Computing}
+'Trusted Computing' was an initiative launched by Microsoft and a number of other tech companies to provide a more secure computer. The aim was to provide software and hardware add-ons to the PC architecture that would enable people to be sure that a given program was running on a machin with a given specification. Originially created to support Digital Rights Management.
+
+\subsubsection*{Hardware Protection}
+Is the idea of preventing one process from interfering with another, commonly called the protection problem. The confinement problem attepts to keep programs from communicating outward other than through their authorized channels The confinement problem attepts to keep programs from communicating outward other than through their authorized channels.
+
+\subsection*{Common Attacks}
+\subsubsection*{Stack Smashing}
+Half of all technical attacks on operating systems that are reported come from memory overwritting attacks or smashing the stack. The basic idea behind it is that programmers are often careless about checking the size of arguments, so an attacker who passes a long argument to a program may find that some of it gets treated as code rather than data.
+\begin{center}
+\includegraphics[scale=.3]{StackSmash}
+\end{center}
+
+\subsubsection*{Format String Vulnerability}
+This arises when a machine accepts input data as a formatting instruction (ex \%n in the C command printf()). This can allow the string's author to write to the stack.
+
+\subsubsection*{SQL Insertion Attacks}
+These commonly arise when a careless webdeveloper passes user input to a back-end database without checking to see whether it contains SQL code.
+
+\subsubsection*{Integer Manipulation Attack}
+If you don't check for data sizes before writing, the integer manipulation attack uses an overflow, underflow, wrap-arround or truncation that can result from writing an inappropriate number of bytes to the stack.
+
+\subsubsection*{Race Conditions}
+Race conditions occur when a transaction is carried out in two or more stages, and it is possible for someone to alter it after the stage which involves verifying access rights.
+
+\subsubsection*{User Interface Failures}
+One of the earliest attacks was the Trojan Horse, a program that the administrator is invited to run and which will do some harm if he does so. Ex) a game that would check whether the player was the administrator, and if so create another administrator account with a known password.
 
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
