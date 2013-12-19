@@ -230,6 +230,81 @@ Most web pages have multiple objects. Naively, this would be one tcp connection 
             \item Replicates popular web sites across multiple machines. This spreads load on servers, places content closer to clients, and helps when content isn't cacheable. To account for locationality, DNS returns different addresses based on client's geo location, server load, ect.
         \end{itemize}
 \end{itemize}
+
+\subsection*{Physical Layer}
+\subsubsection*{Properties of a Desired Link}
+\begin{itemize}
+    \item Fast (High Rate)
+    \item Reliable: Very low probability of undetected error
+\end{itemize}
+
+\subsubsection*{Inside the Link Layer}
+\begin{itemize}
+    \item MAC - Medium Access Control: manages many different connections talking simultaneously. (How to share limited space)
+        \begin{itemize}
+            \item Time Division Multiplexing - taking turns in the Time Domain
+            \item Frequency Division Multiplexing - takes turns in Frequency Domain
+            \item Spacial Division Multiplexing - Chooses a particular direction to listen to signals (cell phones)
+            \item Aloha Protocol - If you have data to transmit, send it. 2/3rds of bandwidth is lost, but it turns out to be bettern than making everyone wait for a turn to send data.
+        \end{itemize}
+    \item PHY - "Physical Layer", gets bits from point A to point B. This operates on 3 levels,
+        \begin{itemize}
+            \item Bits - dealing with individual bits of data\\
+                Bits are packaged into frames, with codes for error detection and correction
+            \item Signals - operates on the signal level (Discrete Time Sampling)\\
+                Modulation, translates the bits into analog values and vice versa\\
+                Codes, Hash functions used to verify frames, add redundancy (Reid Soloman)
+            \item Hardware - Antennas/ Laser Diodes\\
+                Timers/Clocks, Mixing/Demixing, Amplification, Filtering, Antennas
+        \end{itemize}
+\end{itemize}
+
+\subsubsection*{Raw Resource(s) in Wireless}
+In Wireless (802.11n)
+\begin{itemize}
+    \item W, Bandwidth (MHz) typically 20MHz for wifi
+    \item k, Number of antennas
+    \item Signal to Noise Ratio (SNR)
+    \item Acheivable Bits/second = \(k*W\log_{2}(1+SNR)\)
+\end{itemize}
+
+\subsubsection*{Random Access MAC Protocols}
+ALOHA, slotted ALOHA, CSMA
+\begin{itemize}
+    \item When a node has a packet to send, it transmits at full channel data rate, there is no priorities given. If two or more nodes happen to transmit at the same time (collision), the data is lost.
+    \item The Random Access MAC protocols specify how to detect collisions and recover from them.
+\end{itemize}
+
+\subsubsection*{Carrier Sense Multiple Access (CSMA)}
+Basically Clear Channel Assessment, if the channel sensed idle, transmit entire frame otherwise delay transmission. Because of propagation delays, this doesn't eliminate all collisions.
+
+\subsubsection*{CSMA/CD (Collision Detection)}
+This protocol when a collision is detected, it aborts the transmission thereby removing time that was wasted seding a packet that would be useless. CD has limited use in high latency environments and is difficult in wireless scenarios
+
+\subsubsection*{Key Ideas of Random Access}
+\begin{itemize}
+    \item Carrier Sense: before sending check to see if anyone else is.
+    \item Collision detection: if someone else starts talking at the same time, stop
+    \item Collision avoidance: Explicit ACK from receiver signals lack of collision and impending communication
+    \item Randomness: if you can't send, wait a random amount of time before trying again
+\end{itemize}
+
+\subsection*{Wireless}
+\subsubsection*{Properties of Wireless}
+\begin{itemize}
+    \item Broadcast: colisions happen, limited range (no global collisions.)
+    \item Can't receive while broadcasting, can't detect collisions
+    \item Complex signal deterioration (no defined radio range)
+\end{itemize}
+
+\subsubsection*{Wireless Protocols (RTS/CTS)}
+CSMA/CA Collision Avoidance\\
+\begin{itemize}
+    \item RTS (Request to Send) frame is sent out containing the length of the transmission and the destination.
+    \item CTS (Clear to Send) frame is sent back if it is ok. Then the sender can transmit it's data
+    \item If there is no CTS, the sender assumes a collision
+\end{itemize}
+
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
 \scriptsize
