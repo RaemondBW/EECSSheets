@@ -305,6 +305,61 @@ CSMA/CA Collision Avoidance\\
     \item If there is no CTS, the sender assumes a collision
 \end{itemize}
 
+\subsection*{Ethernet}
+\subsubsection*{Self Learning in Ethernet}
+Approach
+\begin{itemize}
+    \item Flod first packet to node you are trying to reach
+    \item Avoids loop by restricting flooding to spanning tree
+    \item Flooding allows packet to reach destination
+    \item In the process switches learn how to reach source of flood
+\end{itemize}
+
+\subsubsection*{Building the Spanning Tree}
+\begin{itemize}
+    \item Shortest paths to (or from) a node form a tree
+        % todo finish this
+\end{itemize}
+
+\subsection*{Naming accross the Layers}
+\begin{itemize}
+    \item Application layer: URLs and Domain Names
+    \item Network Layer: IP addresses
+    \item Link Layer: MAC addresses
+\end{itemize}
+When a host is born, all it knows is its MAC address. It needs to discover it's IP address and the remote host's IP
+
+\subsubsection*{Dynamic Host Configuration Protocol (DHCP)}
+DHCP is used to discover a host's own IP address, netmask, IP addresses for DNS name servers, and IP addresses for the first-hop routers.
+\begin{enumerate}
+    \item One or more local DHCP servers maintain the required information.
+    \item Client broadcasts a DHCP discovery message.
+    \item One or more DHCP servers respond witha DHCP "offer" message
+    \item Client broadcasts a DHCP request message
+    \item Selected DHCP server response with an ACK
+\end{enumerate}
+Done over port 67
+
+\subsubsection*{Address Resolution Protocol (ARP)}
+\begin{itemize}
+    \item Every host maintains an ARP table (list of IP address -> MAC address pairs)
+    \item When sending a packet the host consults the table
+    \item If the IP address is not in the table,\\
+        the sender broadcasts "Who has IP address 1.2.3.4?"\\
+        the receiver response: "MAC address 58-58-88-FA-20-B0"\\
+        The response goes into the host's table.
+\end{itemize}
+
+\subsection*{How to we get Google (Starting with a cold start)?}
+\begin{enumerate}
+    \item Self Discovery: You use DHCP to discover bootstrap parameters. (Your IP address, your DNS server's IP, Router's IP Address, \ldots)
+    \item You need to find the MAC address of your Router, ARP
+    \item Get google's IP: create a dns query to my local server's IP address. Directed using the router's MAC.
+    \item Get google's webpage from its server
+\end{enumerate}
+
+
+
 % You can even have references
 \rule{0.3\linewidth}{0.25pt}
 \scriptsize
