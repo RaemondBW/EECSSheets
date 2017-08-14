@@ -3,10 +3,12 @@ A Repository of various study/note sheets for various classes in the Cal EECS de
 
 
 ## Classes
-* CS161 Computer Security with a focus on applied cryptography
-* EE122 Computer Networks now CS168?
-* CS170 Algorithms
+* [CS161 Computer Security with a focus on applied cryptography](https://github.com/RaemondBW/EECSSheets/blob/master/cs161/final.pdf)
+* [EE122 Computer Networks now CS168](https://github.com/RaemondBW/EECSSheets/blob/master/ee122/final.pdf)
+* [CS170 Algorithms](https://github.com/RaemondBW/EECSSheets/blob/master/cs170/final.pdf)
 * CS188 Artificial Intelligence
+    * [Mid Term 2](https://github.com/RaemondBW/EECSSheets/blob/master/cs188/midterm2/midterm2.pdf)
+    * [Final](https://github.com/RaemondBW/EECSSheets/blob/master/cs188/finalSheet/final.tex)
 
 
 ## Other interesting Note Sheets
